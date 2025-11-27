@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Nawożenia Borówki</title>
+    <style>
+        :root {
+            --primary-color: #2c5282; /* Granat borówkowy */
+            --accent-color: #48bb78;  /* Zieleń liści */
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Ważne dla paddingu */
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.2);
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .col {
+            flex: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #1a365d;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            border-radius: 8px;
+            display: none; /* Ukryte domyślnie */
+        }
+
+        .result-item {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #cbd5e0;
+            padding-bottom: 5px;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .warning {
+            background-color: #fffaf0;
+            border-left: 4px solid #ed8936;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #744210;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🫐 Kalkulator Nawożenia</h1>
+
+    <div class="section-title">1. Wyniki badań i Cel</div>
+    
+    <div class="form-group">
+        <label for="nutrient">Jaki składnik liczysz?</label>
+        <select id="nutrient">
+            <option value="1.2">Potas (K) &rarr; przeliczany na K₂O</option>
+            <option value="2.3">Fosfor (P) &rarr; przeliczany na P₂O₅</option>
+            <option value="1.6">Magnez (Mg) &rarr; przeliczany na MgO</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="current">Aktualnie (mg/l)</label>
+                <input type="number" id="current" value="70">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="target">Cel (mg/l)</label>
+                <input type="number" id="target" value="120">
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">2. Rodzaj nawozu</div>
+    <div class="form-group">
+        <label for="concentration">Stężenie nawozu (%)</label>
+        <input type="number" id="concentration" value="50" placeholder="np. 50 dla siarczanu potasu">
+        <div class="note">Np. Siarczan potasu = 50%, Superfosfat = 46%, Siarczan magnezu = 16%</div>
+    </div>
+
+    <div class="section-title">3. Wymiary plantacji</div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="rowWidth">Szer. pasa (cm)</label>
+                <input type="number" id="rowWidth" value="80">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="rowLength">Długość rzędu (m)</label>
+                <input type="number" id="rowLength" value="250">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="rowCount">Liczba rzędów</label>
+        <input type="number" id="rowCount" value="12">
+    </div>
+
+    <button onclick="calculate()">OBLICZ DAWKĘ</button>
+
+    <div id="result">
+        <div class="result-item">
+            <span>Deficyt składnika:</span>
+            <span id="resDeficit">0 mg/l</span>
+        </div>
+        <div class="result-item">
+            <span>Dawka na 1 m² rzędu:</span>
+            <span id="resPerM2">0 g</span>
+        </div>
+        <div class="result-item">
+            <span>Dawka na 1 mb rzędu:</span>
+            <span id="resPerLinear">0 g</span>
+        </div>
+        <div class="result-item" style="color:var(--primary-color); font-weight:bold;">
+            <span>Łącznie na 1 rząd:</span>
+            <span id="resPerRow">0 kg</span>
+        </div>
+        <div class="result-item">
+            <span>CAŁA PLANTACJA:</span>
+            <span id="resTotal">0 kg</span>
+        </div>
+
+        <div id="warningBox" class="warning" style="display:none;">
+            <strong>Uwaga:</strong> Wyliczona dawka na m² jest wysoka (>25g). Zaleca się podzielić ją na dwie aplikacje w odstępie 4-6 tygodni, aby nie uszkodzić korzeni!
+        </div>
+    </div>
+
+    <div class="note" style="text-align: center; margin-top: 20px;">
+        Kalkulator przyjmuje głębokość strefy korzeniowej 30 cm.<br>
+        Używasz na własną odpowiedzialność.
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        // 1. Pobranie danych
+        const factor = parseFloat(document.getElementById('nutrient').value);
+        const current = parseFloat(document.getElementById('current').value);
+        const target = parseFloat(document.getElementById('target').value);
+        const concentration = parseFloat(document.getElementById('concentration').value);
+        const rowWidthCm = parseFloat(document.getElementById('rowWidth').value);
+        const rowLength = parseFloat(document.getElementById('rowLength').value);
+        const rowCount = parseFloat(document.getElementById('rowCount').value);
+
+        // Walidacja
+        if (current >= target) {
+            alert("Poziom aktualny jest wyższy lub równy celowi. Nawożenie nie jest konieczne!");
+            return;
+        }
+
+        // 2. Obliczenia logiczne
+        
+        // Deficyt (mg/l)
+        const deficit = target - current;
+
+        // Objętość gleby na 1 m2 (przy głębokości 30cm) = 300 litrów
+        const soilVolume = 300; 
+
+        // Brakujący czysty składnik na 1 m2 (mg -> g)
+        const deficitPerM2_g = (deficit * soilVolume) / 1000;
+
+        // Zamiana na formę tlenkową (K -> K2O itd.)
+        const oxidePerM2 = deficitPerM2_g * factor;
+
+        // Ilość nawozu na 1 m2 (uwzględniając stężenie %)
+        const fertilizerPerM2 = oxidePerM2 / (concentration / 100);
+
+        // Skalowanie na pas uprawny (szerokość rzędu)
+        // Jeśli pas ma 100cm (1m) to mnożnik jest 1. Jeśli 80cm to 0.8
+        const widthMultiplier = rowWidthCm / 100;
+        
+        // Dawka na 1 metr bieżący rzędu
+        const fertilizerPerLinearMeter = fertilizerPerM2 * widthMultiplier;
+
+        // Dawka na jeden cały rząd (kg)
+        const fertilizerPerRowKg = (fertilizerPerLinearMeter * rowLength) / 1000;
+
+        // Dawka całkowita (kg)
+        const totalFertilizer = fertilizerPerRowKg * rowCount;
+
+        // 3. Wyświetlanie wyników
+        document.getElementById('resDeficit').innerText = deficit.toFixed(0) + " mg/l";
+        document.getElementById('resPerM2').innerText = fertilizerPerM2.toFixed(1) + " g";
+        document.getElementById('resPerLinear').innerText = fertilizerPerLinearMeter.toFixed(1) + " g";
+        document.getElementById('resPerRow').innerText = fertilizerPerRowKg.toFixed(2) + " kg";
+        document.getElementById('resTotal').innerText = totalFertilizer.toFixed(1) + " kg";
+
+        // Ostrzeżenie o wysokiej dawce
+        const warningBox = document.getElementById('warningBox');
+        if (fertilizerPerM2 > 25) {
+            warningBox.style.display = 'block';
+        } else {
+            warningBox.style.display = 'none';
+        }
+
+        // Pokazanie sekcji wyników
+        document.getElementById('result').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
